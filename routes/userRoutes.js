@@ -15,6 +15,8 @@ api.get('/saludo', (req, res) => {
 
 api.post('/', userController.create); 
 
+api.get('/', userController.list);
+
 api.put('/:id', userController.update);
 
 api.delete('/:id', userController.remove);

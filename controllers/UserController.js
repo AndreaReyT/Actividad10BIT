@@ -35,6 +35,34 @@ function create(req, res){
 }
 
 
+
+function list(req, res){
+    var dataUser = req.body; 
+    var id = req.params.id; 
+
+    User.find(id, (error, listUser) => {
+        if(error){
+            res.send({
+                message: "Error al conectarnos al servidor",
+                statusCode: 500
+            })
+        }else{
+            if(!listUser){
+                res.send({
+                    message: "Mo fue posible listar a los usuarios",
+                    statusCode: 200
+                })
+            }else{
+                res.send({
+                    message: "Lista de usuarios",
+                    statusCode: 200,
+                    dataUser: listUser 
+                })
+            }
+        }
+    })
+}
+
 function update(req, res){
     var dataUser = req.body; 
     var id = req.params.id;
@@ -125,6 +153,7 @@ function login(req, res){
 
 module.exports = {
     create,
+    list, 
     update, 
     remove,
     login
