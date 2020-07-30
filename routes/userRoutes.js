@@ -15,12 +15,14 @@ api.get('/saludo', (req, res) => {
 
 api.post('/', userController.create); 
 
-api.get('/', userController.list);
+api.get('/allUser', userController.list);
 
 api.put('/:id', userController.update);
 
 api.delete('/:id', userController.remove);
 
 api.post('/login', userController.login); 
+
+api.get('/getUser/:id', userController.getUser);
 
 module.exports = api; 

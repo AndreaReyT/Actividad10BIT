@@ -3,6 +3,7 @@ const User = require('../models/User');
 function create(req, res){
     var user = new User(); 
     var params = req.body;
+    console.log(params) 
     
     user.firstName = params.firstName; 
     user.lastName = params.lastName; 
@@ -119,30 +120,31 @@ function remove(req, res){
 }
 
 function login(req, res){
-    var params = req.body; 
+    let params = req.body; 
 
     User.findOne({email: params.email}, (error, userLogged) => {
         if (error){
-            res.send({
+            res.status(500).send({
                 message: "Error en el servidor",
                 statusCode: 500
             })
         }else {
             if(!userLogged){
-                res.send({
+                res.status(200).send({
                     message: "Usuario no existe",
                     statusCode: 400
                 })
             }else{
                 if (userLogged.password == params.password){
-                    res.send({
+                    res.status(200).send({
                         message: "Bienvenido",
-                        statusCode: 200
+                        statusCode: 200,
+                        dataUser: userLogged
                     })
                 }else{
-                    res.send({
+                    res.status(200).send({
                         message: "Los datos no coinciden",
-                        statusCode: 401 
+                        statusCode: 204
                     })
                 }
             }
@@ -150,11 +152,30 @@ function login(req, res){
     })
 }
 
+function getUser( req, res){
+    var id = req.params.id;
+    User.findById(id, (error, allUser) => {
+        if (error) {
+            res.status(500).send({
+                statusCode: 500,
+                message: "Error en el servidor"
+            })
+        } else {
+            res.status(200).send({
+                statusCode: 200,
+                message: "Todos los usuarios",
+                allUser: allUser
+            })
+        }
+    } )
+
+}
 
 module.exports = {
     create,
     list, 
     update, 
     remove,
-    login
+    login,
+    getUser
 }
